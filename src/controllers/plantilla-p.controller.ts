@@ -1,3 +1,5 @@
+import {authenticate} from '@loopback/authentication';
+import {authorize} from '@loopback/authorization';
 import {
   Count,
   CountSchema,
@@ -20,12 +22,15 @@ import {
 import {PlantillaP} from '../models';
 import {PlantillaPRepository} from '../repositories';
 
+@authenticate('jwt')
+
 export class PlantillaPController {
   constructor(
     @repository(PlantillaPRepository)
     public plantillaPRepository: PlantillaPRepository,
   ) { }
 
+  @authorize({allowedRoles: ['admin']})
   @post('/plantilla-ps')
   @response(200, {
     description: 'PlantillaP model instance',
@@ -47,6 +52,8 @@ export class PlantillaPController {
     return this.plantillaPRepository.create(plantillaP);
   }
 
+
+  @authorize({allowedRoles: ['admin']})
   @get('/plantilla-ps/count')
   @response(200, {
     description: 'PlantillaP model count',
@@ -57,6 +64,7 @@ export class PlantillaPController {
   ): Promise<Count> {
     return this.plantillaPRepository.count(where);
   }
+
 
   @get('/plantilla-ps')
   @response(200, {
@@ -76,6 +84,7 @@ export class PlantillaPController {
     return this.plantillaPRepository.find(filter);
   }
 
+  @authorize({allowedRoles: ['admin']})
   @patch('/plantilla-ps')
   @response(200, {
     description: 'PlantillaP PATCH success count',
@@ -95,6 +104,7 @@ export class PlantillaPController {
     return this.plantillaPRepository.updateAll(plantillaP, where);
   }
 
+
   @get('/plantilla-ps/{id}')
   @response(200, {
     description: 'PlantillaP model instance',
@@ -111,6 +121,7 @@ export class PlantillaPController {
     return this.plantillaPRepository.findById(id, filter);
   }
 
+  @authorize({allowedRoles: ['admin']})
   @patch('/plantilla-ps/{id}')
   @response(204, {
     description: 'PlantillaP PATCH success',
@@ -129,6 +140,7 @@ export class PlantillaPController {
     await this.plantillaPRepository.updateById(id, plantillaP);
   }
 
+  @authorize({allowedRoles: ['admin']})
   @put('/plantilla-ps/{id}')
   @response(204, {
     description: 'PlantillaP PUT success',
@@ -140,6 +152,7 @@ export class PlantillaPController {
     await this.plantillaPRepository.replaceById(id, plantillaP);
   }
 
+  @authorize({allowedRoles: ['admin']})
   @del('/plantilla-ps/{id}')
   @response(204, {
     description: 'PlantillaP DELETE success',

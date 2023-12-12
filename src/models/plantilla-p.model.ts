@@ -3,10 +3,11 @@ import {Entity, model, property} from '@loopback/repository';
 @model({settings: {strict: false}})
 export class PlantillaP extends Entity {
   @property({
-    type: 'object',
-    required: true,
+    type: 'string',
+    id: true,
+    generated: true,
   })
-  idPlatilla: object;
+  idPlatilla?: string;
 
   @property({
     type: 'array',
@@ -14,6 +15,15 @@ export class PlantillaP extends Entity {
   })
   items?: object[];
 
+  @property({
+    type: 'string',
+  })
+  nombrePlatilla?: string;
+
+  @property({
+    type: 'number'
+  })
+  version?: number;
   // Define well-known properties here
 
   // Indexer property to allow additional data

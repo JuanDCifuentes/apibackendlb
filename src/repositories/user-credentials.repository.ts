@@ -1,16 +1,16 @@
 import {inject} from '@loopback/core';
 import {DefaultCrudRepository} from '@loopback/repository';
 import {MongoProyectOneDataSource} from '../datasources';
-import {Administrador, AdministradorRelations} from '../models';
+import {UserCredentials, UserCredentialsRelations} from '../models';
 
-export class AdministradorRepository extends DefaultCrudRepository<
-  Administrador,
-  typeof Administrador.prototype.idAdmin,
-  AdministradorRelations
+export class UserCredentialsRepository extends DefaultCrudRepository<
+  UserCredentials,
+  typeof UserCredentials.prototype.id,
+  UserCredentialsRelations
 > {
   constructor(
     @inject('datasources.MongoProyectOne') dataSource: MongoProyectOneDataSource,
   ) {
-    super(Administrador, dataSource);
+    super(UserCredentials, dataSource);
   }
 }

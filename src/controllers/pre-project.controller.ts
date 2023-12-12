@@ -1,3 +1,5 @@
+import {authenticate} from '@loopback/authentication';
+import {authorize} from '@loopback/authorization';
 import {
   Count,
   CountSchema,
@@ -20,6 +22,7 @@ import {
 import {PreProject} from '../models';
 import {PreProjectRepository} from '../repositories';
 
+@authenticate('jwt')
 export class PreProjectController {
   constructor(
     @repository(PreProjectRepository)
@@ -47,6 +50,7 @@ export class PreProjectController {
     return this.preProjectRepository.create(preProject);
   }
 
+  @authorize({allowedRoles: ['admin']})
   @get('/pre-projects/count')
   @response(200, {
     description: 'PreProject model count',
@@ -58,6 +62,7 @@ export class PreProjectController {
     return this.preProjectRepository.count(where);
   }
 
+  @authorize({allowedRoles: ['admin']})
   @get('/pre-projects')
   @response(200, {
     description: 'Array of PreProject model instances',
@@ -76,24 +81,6 @@ export class PreProjectController {
     return this.preProjectRepository.find(filter);
   }
 
-  @patch('/pre-projects')
-  @response(200, {
-    description: 'PreProject PATCH success count',
-    content: {'application/json': {schema: CountSchema}},
-  })
-  async updateAll(
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(PreProject, {partial: true}),
-        },
-      },
-    })
-    preProject: PreProject,
-    @param.where(PreProject) where?: Where<PreProject>,
-  ): Promise<Count> {
-    return this.preProjectRepository.updateAll(preProject, where);
-  }
 
   @get('/pre-projects/{id}')
   @response(200, {

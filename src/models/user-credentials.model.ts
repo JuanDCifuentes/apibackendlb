@@ -1,19 +1,13 @@
 import {Entity, model, property} from '@loopback/repository';
 
 @model({settings: {strict: false}})
-export class Administrador extends Entity {
+export class UserCredentials extends Entity {
   @property({
-    type: 'string',
+    type: 'number',
     id: true,
     generated: true,
   })
-  idAdmin?: string;
-
-  @property({
-    type: 'string',
-    required: true,
-  })
-  userName: string;
+  id?: number;
 
   @property({
     type: 'string',
@@ -21,19 +15,23 @@ export class Administrador extends Entity {
   })
   password: string;
 
+  @property({
+    type: 'string',
+  })
+  usersId?: string;
   // Define well-known properties here
 
   // Indexer property to allow additional data
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [prop: string]: any;
 
-  constructor(data?: Partial<Administrador>) {
+  constructor(data?: Partial<UserCredentials>) {
     super(data);
   }
 }
 
-export interface AdministradorRelations {
+export interface UserCredentialsRelations {
   // describe navigational properties here
 }
 
-export type AdministradorWithRelations = Administrador & AdministradorRelations;
+export type UserCredentialsWithRelations = UserCredentials & UserCredentialsRelations;

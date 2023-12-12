@@ -1,10 +1,12 @@
+import {authenticate} from '@loopback/authentication';
+import {authorize} from "@loopback/authorization";
 import {
   Count,
   CountSchema,
   Filter,
   FilterExcludingWhere,
-  repository,
   Where,
+  repository,
 } from '@loopback/repository';
 import {
   del,
@@ -12,41 +14,21 @@ import {
   getModelSchemaRef,
   param,
   patch,
-  post,
   put,
   requestBody,
-  response,
+  response
 } from '@loopback/rest';
 import {Users} from '../models';
 import {UsersRepository} from '../repositories';
 
+@authenticate('jwt')
 export class UserController {
   constructor(
     @repository(UsersRepository)
     public usersRepository: UsersRepository,
   ) { }
 
-  @post('/users')
-  @response(200, {
-    description: 'Users model instance',
-    content: {'application/json': {schema: getModelSchemaRef(Users)}},
-  })
-  async create(
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(Users, {
-            title: 'NewUsers',
-            exclude: ['id'],
-          }),
-        },
-      },
-    })
-    users: Omit<Users, 'id'>,
-  ): Promise<Users> {
-    return this.usersRepository.create(users);
-  }
-
+  @authorize({allowedRoles: ['admin']})
   @get('/users/count')
   @response(200, {
     description: 'Users model count',
@@ -58,6 +40,7 @@ export class UserController {
     return this.usersRepository.count(where);
   }
 
+  @authorize({allowedRoles: ['admin']})
   @get('/users')
   @response(200, {
     description: 'Array of Users model instances',
@@ -76,6 +59,7 @@ export class UserController {
     return this.usersRepository.find(filter);
   }
 
+  @authorize({allowedRoles: ['admin']})
   @patch('/users')
   @response(200, {
     description: 'Users PATCH success count',
@@ -140,6 +124,7 @@ export class UserController {
     await this.usersRepository.replaceById(id, users);
   }
 
+  @authorize({allowedRoles: ['admin']})
   @del('/users/{id}')
   @response(204, {
     description: 'Users DELETE success',
@@ -148,3 +133,4 @@ export class UserController {
     await this.usersRepository.deleteById(id);
   }
 }
+

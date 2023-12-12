@@ -3,10 +3,11 @@ import {Entity, model, property} from '@loopback/repository';
 @model({settings: {strict: false}})
 export class PreProject extends Entity {
   @property({
-    type: 'object',
-    required: true,
+    type: 'string',
+    id: true,
+    generated: true,
   })
-  id: object;
+  id?: object;
 
   @property({
     type: 'string',
@@ -30,6 +31,11 @@ export class PreProject extends Entity {
     type: 'object',
   })
   infoProject?: object;
+
+  @property({
+    type: 'string'
+  })
+  plantillaID?: string;
 
   // Define well-known properties here
 
